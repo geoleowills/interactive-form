@@ -80,7 +80,7 @@ designSelectBox.addEventListener('change', (e) => {
 
 
 /* ========================
-Activities total price display
+Activities - total price display and disable any activities where times clash.
 ======================== */
 
 // Creates and appends a total price box to the activities section, sets to 0.
@@ -97,25 +97,18 @@ document.querySelector('.activities').appendChild(totalActivityDiv);
 
 const activitiesSection = document.querySelector('fieldset.activities');
 
-// Listens for one of the chekcboxes to be checked or unchecked, updates the total price
-// and disables any other checkboxes where the time clashes with the one just selected.
+// Listens for one of the checkboxes to be checked or unchecked, disables 
+// any other checkboxes where the time clashes with the one just selected
+// and updates the total price box.
 activitiesSection.addEventListener('change', (e) => {
     e.preventDefault();
     // Gets day and time of checked checkbox
     let checkedDateTime = e.target.getAttribute('data-day-and-time');
     for (let i = 0; i < activitiesSection.children.length; i++) {
-        // Selects the checkbox element.
-        const checkbox = activitiesSection.children[i].firstElementChild;
         // Checks that the element is a label element containing the checkbox and not a legend, div or p.
         if (activitiesSection.children[i].tagName === 'LABEL') {
-            // Adds or removes to the total price count dependant of whether the checkbox has been checked or unchecked.
-            if (e.target.checked) {
-                totalPriceCount += parseInt(checkbox.getAttribute('data-cost'));
-                totalActivityTextBox.value = `$ ${totalPriceCount}.00`;
-            } else if (!e.target.checked) {
-                totalPriceCount -= parseInt(checkbox.getAttribute('data-cost'));
-                totalActivityTextBox.value = `$ ${totalPriceCount}.00`;
-            }
+            // Selects the checkbox element.
+            const checkbox = activitiesSection.children[i].firstElementChild;
             // Checks if the day and time of the target checkbox label is the same as the checkbox label of the current iteration.
             if (e.target.getAttribute('name') !== checkbox.getAttribute('name') && checkedDateTime === checkbox.getAttribute('data-day-and-time')) {
                 // If the current iteration checkbox is already disabled, it un-disables it, otherwise it disables it.
@@ -126,8 +119,15 @@ activitiesSection.addEventListener('change', (e) => {
                 }
             }
         }
-
-        }
+    }
+    // Adds or removes to the total price count dependant of whether the checkbox has been checked or unchecked.
+    if (e.target.checked) {
+        totalPriceCount += parseInt(e.target.getAttribute('data-cost'));
+        totalActivityTextBox.value = `$ ${totalPriceCount}.00`;
+    } else if (!e.target.checked) {
+        totalPriceCount -= parseInt(e.target.getAttribute('data-cost'));
+        totalActivityTextBox.value = `$ ${totalPriceCount}.00`;
+    }
 });
 
 /* ========================
