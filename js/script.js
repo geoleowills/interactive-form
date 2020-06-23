@@ -45,8 +45,8 @@ function removeColorOptions() {
 removeColorOptions();
 
 // Stores the color options for each of the two T-Shirt options.
-const heartJsColors = ['cornflowerblue', 'darkslategrey', 'gold'];
-const jsPunsColors = ['tomato', 'steelblue', 'dimgrey'];
+const jsPunsColors = ['cornflowerblue', 'darkslategrey', 'gold'];
+const heartJsColors = ['tomato', 'steelblue', 'dimgrey'];
 
 // Listens for a change in the T-shirt design select box, when one of the t-shirts designs has been 
 // selected, it loops through the color options checks if that option is listed in the selected
@@ -249,21 +249,22 @@ let creditCardErrorMessage = document.createElement('p');
 creditCardErrorMessage.style.color = 'red';
 creditCardElement.appendChild(creditCardErrorMessage);
 creditCardErrorMessage.hidden = true;
+const creditCardRegex = /^(\s*\d\s*){13,16}$/
 
 // Checks that entered credit card number is at least 13 digits long and no longer than 16
 // digits and not empty, if it doesn't fall within these parameters, an error message is displayed.
 function creditCardValidator() {
-    if (cardNumber.value === '') {
-        creditCardErrorMessage.textContent = 'Please enter a credit card number.';
+    if (cardNumber.value === '' || /\D/.test(cardNumber.value)) {
+        creditCardErrorMessage.textContent = 'Please enter a credit card number';
         creditCardErrorMessage.hidden = false;
-        return false;
-    } else if (cardNumber.value.replace(/\s+/g, '').length < 13 || cardNumber.value.replace(/\s+/g, '').length > 16) {
-        creditCardErrorMessage.textContent = 'Please enter a credit number between 13 and 16 digits long.'
+        return false
+    } else if (!creditCardRegex.test(cardNumber.value)) {
+        creditCardErrorMessage.textContent = 'Please enter a credit card number between 13 and 16 digits.';
         creditCardErrorMessage.hidden = false;
-        return false;
+        return false
     } else {
         creditCardErrorMessage.hidden = true;
-        return true;
+        return true
     }
 }
 
@@ -275,6 +276,7 @@ let zipErrorMessage = document.createElement('p');
 zipErrorMessage.style.color = 'red';
 zipElement.appendChild(zipErrorMessage);
 zipErrorMessage.hidden = true;
+const zipRegex = /^(\s*\d\s*){5}$/;
 
 // Checks that entered zip code is 5 digits long, if it doesn't fall within these 
 // parameters, the error message is displayed.
@@ -283,7 +285,7 @@ function zipValidator() {
         zipErrorMessage.textContent = 'Please enter a Zip code.';
         zipErrorMessage.hidden = false;
         return false;
-    } else if (!(zipCode.value.replace(/\s+/g, '').length === 5)) {
+    } else if (!zipRegex.test(zipCode.value)) {
         zipErrorMessage.textContent = 'Please enter a Zip code that is 5 digits long.';
         zipErrorMessage.hidden = false;
         return false;
@@ -301,6 +303,7 @@ let cvvErrorMessage = document.createElement('p');
 cvvErrorMessage.style.color = 'red';
 cvvElement.appendChild(cvvErrorMessage);
 cvvErrorMessage.hidden = true;
+const cvvRegex = /^(\s*\d\s*){3}$/
 
 // Checks that entered CVV is 3 digits long and that an empty string hasn't been entered, 
 // if it doesn't fall within these parameters, an error message is displayed.
@@ -309,7 +312,7 @@ function cvvValidator() {
         cvvErrorMessage.textContent = 'Please enter a CVV code.';
         cvvErrorMessage.hidden = false;
         return false;
-    } else if (!(cvvCode.value.replace(/\s+/g, '').length === 3)) {
+    } else if (!cvvRegex.test(cvvCode.value)) {
         cvvErrorMessage.textContent = 'Please enter a CVV code that is 3 digits long.';
         cvvErrorMessage.hidden = false;
         return false;
